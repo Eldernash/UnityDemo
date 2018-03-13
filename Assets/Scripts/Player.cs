@@ -44,7 +44,7 @@ public class Player : MonoBehaviour {
         m_animator.SetFloat("SprintSpeed", vertical * sprintSpeed * Time.deltaTime);
         m_animator.SetFloat("SneakSpeed", vertical * sneakSpeed * Time.deltaTime);
 
-        grounded = Physics.Raycast(transform.position, Vector3.down, 0.1f) && moveDirection.y <= 0;
+        grounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
         m_animator.SetBool("Grounded", grounded);
 
         crouching = Input.GetKey(KeyCode.LeftControl) && grounded;
@@ -52,6 +52,12 @@ public class Player : MonoBehaviour {
 
         running = Input.GetKey(KeyCode.LeftShift);
         m_animator.SetBool("Running", running);
+
+        if (grounded) {
+            moveDirection.y = 0;
+        } else if (!grounded) { // if the player is grounded, stop applying gravity. If they are, apply gravity
+            moveDirection.y -= gravity * Time.deltaTime;
+        }
 
         if (Input.GetButtonDown("Jump") && grounded && !crouching) {
             moveDirection.y = jumpStrength;
@@ -65,9 +71,6 @@ public class Player : MonoBehaviour {
             m_controller.height = 2.0f; // restores hitbox height
         }
 
-        if (!grounded) { // if the player is grounded, stop applying gravity. If they are, apply gravity
-            moveDirection.y -= gravity * Time.deltaTime;
-        }
         m_controller.Move(moveDirection * Time.deltaTime);
 	}
 
