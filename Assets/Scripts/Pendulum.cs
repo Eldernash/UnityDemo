@@ -23,14 +23,14 @@ public class Pendulum : MonoBehaviour {
 	void Update () {
         float angle = pendulumArm.rotation.z;
 
-        if (angle > maximumAngle)
-        {
+        if (angle > maximumAngle) {
             motor.targetVelocity = rotationSpeedNegative;
         }
         if (angle < -maximumAngle) {
             motor.targetVelocity = rotationSpeed;
         }
 
+        // 
         motor.force = 3.402823e+38f;
         motor.freeSpin = false;
         joint.motor = motor;

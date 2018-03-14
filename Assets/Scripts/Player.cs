@@ -20,6 +20,7 @@ public class Player : MonoBehaviour {
 
     public Vector3 moveDirection = Vector3.zero;
 
+    // booleans for controlling animations
     public bool crouching = false;
     public bool grounded = false;
     public bool running = false;
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour {
 
         transform.Rotate(transform.up, horizontal * turnSpeed * Time.deltaTime);
 
+        // ligns the animator booleans up with cript booleans
         m_animator.SetFloat("WalkSpeed", vertical * walkSpeed * Time.deltaTime);
         m_animator.SetFloat("SprintSpeed", vertical * sprintSpeed * Time.deltaTime);
         m_animator.SetFloat("SneakSpeed", vertical * sneakSpeed * Time.deltaTime);
@@ -53,9 +55,10 @@ public class Player : MonoBehaviour {
         running = Input.GetKey(KeyCode.LeftShift);
         m_animator.SetBool("Running", running);
 
+        // if the player is grounded, stop applying gravity. If they are, apply gravity
         if (grounded) {
             moveDirection.y = 0;
-        } else if (!grounded) { // if the player is grounded, stop applying gravity. If they are, apply gravity
+        } else if (!grounded) { 
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
@@ -63,17 +66,21 @@ public class Player : MonoBehaviour {
             moveDirection.y = jumpStrength;
         }
         
-        if (crouching && grounded) { // shrinks the hitbox while the player is crouching
-            m_controller.center = new Vector3(0,0.5f,0); // moves the hitbpx position lower to match with where the player is
-            m_controller.height = 1.0f; // reduces the height to match the player's crouch
+        if (crouching && grounded) { 
+            // shrink and lower the hitbox when the character crouches
+            m_controller.center = new Vector3(0,0.5f,0); 
+            m_controller.height = 1.0f; 
         } else {
-            m_controller.center = new Vector3(0, 1.0f, 0); // restores position
-            m_controller.height = 2.0f; // restores hitbox height
+            // restore to normal standing position
+            m_controller.center = new Vector3(0, 1.0f, 0); 
+            m_controller.height = 2.0f; 
         }
 
         m_controller.Move(moveDirection * Time.deltaTime);
 	}
 
+    // called by Unity when the Controller hits another collider
+    //  hit - data structure containing details of collision
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         Rigidbody body = hit.collider.attachedRigidbody;
@@ -83,6 +90,7 @@ public class Player : MonoBehaviour {
         if (hit.moveDirection.y < -0.3F)
             return;
 
+        // push the object in the direction of player movement
         Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
         body.velocity = pushDir * m_pushPower;
     }

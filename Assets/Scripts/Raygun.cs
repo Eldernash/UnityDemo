@@ -16,17 +16,14 @@ public class Raygun : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Fire1"))
-        {
-
+		if (Input.GetButtonDown("Fire1")) {
             RaycastHit hit;
-
             Vector3 rayOrigin = facing.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.0f));
             
             if (Physics.Raycast (rayOrigin, facing.transform.forward, out hit, range)) {
                 if (hit.rigidbody != null) {
                     Debug.Log("Hit");
-                    hit.rigidbody.AddForce(-hit.normal * hitForce);
+                    hit.rigidbody.AddForce(facing.transform.forward * hitForce);
                 }
             }
 
