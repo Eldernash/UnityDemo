@@ -9,8 +9,8 @@ public class Ragdoll : MonoBehaviour {
 
     public bool RagdollOn {
         get { return !animator.enabled; }
-        set
-        {
+        // sets each limb to the desired value
+        set {
             animator.enabled = !value;
             foreach (Rigidbody r in rigidbodies)
                 r.isKinematic = !value;
@@ -24,10 +24,4 @@ public class Ragdoll : MonoBehaviour {
         foreach (Rigidbody r in rigidbodies)
             r.isKinematic = true;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        
-	}
-        
 }

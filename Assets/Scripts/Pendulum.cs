@@ -23,6 +23,7 @@ public class Pendulum : MonoBehaviour {
 	void Update () {
         float angle = pendulumArm.rotation.z;
 
+        // ping-pongs the motor between two rotational positions
         if (angle > maximumAngle) {
             motor.targetVelocity = rotationSpeedNegative;
         }
@@ -30,7 +31,7 @@ public class Pendulum : MonoBehaviour {
             motor.targetVelocity = rotationSpeed;
         }
 
-        // 
+        // resets the hinge joint's motor to use the new motor
         motor.force = 3.402823e+38f;
         motor.freeSpin = false;
         joint.motor = motor;
